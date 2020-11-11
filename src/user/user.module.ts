@@ -2,13 +2,13 @@ import { Global, Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { User } from '../model/user.model';
+import { UserModel } from '../model/user.model';
 
 @Global()
 @Module({
   imports: [
     TypegooseModule.forFeature([
-      { typegooseClass: User, schemaOptions: { timestamps: true } },
+      { typegooseClass: UserModel, schemaOptions: { timestamps: true } },
     ]),
   ],
   controllers: [UserController],

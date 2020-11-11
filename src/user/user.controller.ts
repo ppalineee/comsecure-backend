@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { User } from '../model/user.model';
-import { UserId } from '../decorators/user-id.decorator';
+import { UserModel } from '../model/user.model';
+import { User } from '../decorators/user.decorator';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -11,7 +11,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  async me(@UserId() id: string): Promise<User> {
+  async me(@User() id: string): Promise<UserModel> {
     return this.userService.findById(id);
   }
 }

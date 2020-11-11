@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Post } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { PostModule } from './post/post.modules';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TypegooseModule } from 'nestjs-typegoose';
     }),
     AuthModule,
     UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
-import { User } from '../model/user.model';
+import { UserModel } from '../model/user.model';
 import { ReturnModelType } from '@typegoose/typegoose';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User)
-    private readonly userModel: ReturnModelType<typeof User>
+    @InjectModel(UserModel)
+    private readonly userModel: ReturnModelType<typeof UserModel>
   ) {}
 
-  async find(filter: any): Promise<User[]> {
+  async find(filter: any): Promise<UserModel[]> {
     return this.userModel.find(filter).exec();
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserModel> {
     return this.userModel.findById(id).exec();
   }
 
-  async findOne(conditions: any, password?: boolean): Promise<User> {
+  async findOne(conditions: any, password?: boolean): Promise<UserModel> {
     if (password) {
       return this.userModel.findOne(conditions, '+password').exec();
     }
@@ -29,7 +29,7 @@ export class UserService {
     return this.userModel.exists({ _id: id });
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: UserModel): Promise<UserModel> {
     const newUser = new this.userModel(user);
     return newUser.save();
   }
