@@ -20,6 +20,6 @@ export class UserModel {
   password: string;
 
   @ApiProperty()
-  @prop({ required: true, select: false })
+  @prop({ required: true })
   role: UserRole;
 }
