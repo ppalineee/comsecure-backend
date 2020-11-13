@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { PostModel } from '../model/post.model';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { CommentModel } from 'src/model/comment.model';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectModel(PostModel)
-    private readonly postModel: ReturnModelType<typeof PostModel>
+    private readonly postModel: ReturnModelType<typeof PostModel>,
+    @InjectModel(CommentModel)
+    private readonly commentModel: ReturnModelType<typeof CommentModel>
   ) {}
 
   async find(filter: any): Promise<PostModel[]> {
@@ -38,12 +41,13 @@ export class PostService {
     return newPost.save();
   }
 
-  async edit(pid: string, newContent: string): Promise<PostModel> {
-    return this.postModel.findByIdAndUpdate(pid, {content: newContent}, {new: true}).exec();
+  async edit(pid: string, newTitle: string, newContent: string): Promise<PostModel> {
+    return this.postModel.findByIdAndUpdate(pid, {title: newTitle, content: newContent}, {new: true}).exec();
   }
 
   async delete(pid: string) {
     this.postModel.findByIdAndDelete(pid).exec();
+    this.commentModel.DeleteMany({pid: pid}).exec();
   }
 
 }

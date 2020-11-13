@@ -13,6 +13,10 @@ export class PostModel {
 
   @ApiProperty()
   @prop({ required: true })
+  title: string;
+
+  @ApiProperty()
+  @prop({ required: true })
   content: string;
 
 }

@@ -7,7 +7,7 @@ import { UserModel } from 'src/model/user.model';
 import { RolesGuard } from 'src/guards/role.guard';
 import { UserRole } from 'src/enum/user.enum';
 import { Roles } from 'src/decorators/role.decorator';
-import { ContentDto } from './post.dto';
+import { PostDto } from './post.dto';
 
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
@@ -27,16 +27,16 @@ export class PostController {
   }
 
   @Post()
-  async createPost(@Body() contentDto: ContentDto, @User() user: UserModel): Promise<PostModel> {
+  async createPost(@Body() postDto: PostDto, @User() user: UserModel): Promise<PostModel> {
     console.log(user);
-    return this.postService.create({ownerName: user.username, ownerId: user._id, content: contentDto.content});
+    return this.postService.create({ownerName: user.username, ownerId: user._id, title: postDto.title ,content: postDto.content});
   }
 
   @Patch(":pid")
-  async editPost(@Param('pid') pid: string, @Body() contentDto: ContentDto, @User() user: UserModel) {
+  async editPost(@Param('pid') pid: string, @Body() postDto: PostDto, @User() user: UserModel) {
     const post: PostModel = await this.postService.findById(pid);
     if (post.ownerId == user._id || user.role == UserRole.Admin) {
-        return this.postService.edit(pid, contentDto.content);
+        return this.postService.edit(pid, postDto.title, postDto.content);
     } else {
         throw new BadRequestException('Permission denied.')
     }
