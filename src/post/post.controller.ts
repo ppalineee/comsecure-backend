@@ -21,6 +21,11 @@ export class PostController {
     return this.postService.find({});
   }
 
+  @Get(":pid")
+  async getPost(@Param('pid') pid: string): Promise<PostModel> {
+    return this.postService.findById(pid);
+  }
+
   @Post()
   async createPost(@Body() contentDto: ContentDto, @User() user: UserModel): Promise<PostModel> {
     console.log(user);
