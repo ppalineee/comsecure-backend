@@ -47,7 +47,7 @@ export class PostService {
 
   async delete(pid: string) {
     this.postModel.findByIdAndDelete(pid).exec();
-    this.commentModel.DeleteMany({pid: pid}).exec();
+    this.commentModel.deleteMany({pid: pid}).exec();
   }
 
 }
