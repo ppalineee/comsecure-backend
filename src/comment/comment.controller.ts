@@ -26,7 +26,7 @@ export class CommentController {
         return this.commentService.findById(cid);
     }
 
-    @Get(":pid")
+    @Get("pid/:pid")
     async getCommentByPid(@Param('pid') pid: string): Promise<CommentModel[]> {
         return this.commentService.find({pid: pid});
     }
