@@ -7,6 +7,6 @@ RUN npm install
 
 ADD . /app
 
-EXPOSE 8000
+EXPOSE 3000
 
 CMD ["npm", "start"]
