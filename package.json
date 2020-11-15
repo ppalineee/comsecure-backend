@@ -30,6 +30,8 @@
     "@nestjs/swagger": "^4.7.0",
     "@typegoose/typegoose": "^7.4.1",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.3.1",
+    "class-validator": "^0.12.2",
     "helmet": "^4.2.0",
     "mongoose": "^5.10.13",
     "nestjs-typegoose": "^7.1.38",
