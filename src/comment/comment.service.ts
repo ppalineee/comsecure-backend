@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { CommentModel } from '../model/comment.model';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { PostModel } from 'src/model/post.model';
 
 @Injectable()
 export class CommentService {
   constructor(
     @InjectModel(CommentModel)
-    private readonly commentModel: ReturnModelType<typeof CommentModel>
+    private readonly commentModel: ReturnModelType<typeof CommentModel>,
+    @InjectModel(PostModel)
+    private readonly postModel: ReturnModelType<typeof PostModel>
   ) {}
 
   async find(filter: any): Promise<CommentModel[]> {
@@ -30,6 +33,9 @@ export class CommentService {
   }
 
   async create(comment: CommentModel): Promise<CommentModel> {
+    if (this.postModel.exists(comment.pid)) {
+      throw new BadRequestException('Pid does not exist');
+    }
     const newComment = new this.commentModel(comment);
     return newComment.save();
   }

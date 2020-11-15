@@ -4,11 +4,13 @@ import * as helmet from 'helmet';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
+  app.useGlobalPipes(new ValidationPipe());
   /**
    * wildcard origin is not recommended, consider using
    * app.enableCors({ origin: 'https://your.origin/' })
