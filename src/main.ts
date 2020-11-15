@@ -1,6 +1,7 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as helmet from 'helmet';
+import * as csurf from 'csurf';
 import { AppModule } from './app.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
@@ -16,6 +17,7 @@ async function bootstrap() {
    * app.enableCors({ origin: 'https://your.origin/' })
    */
   app.enableCors();
+  app.use(csurf());
 
   const options = new DocumentBuilder()
     .setTitle('NestJS with MongoDB skeleton')
