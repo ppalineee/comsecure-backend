@@ -17,7 +17,7 @@ async function bootstrap() {
    * app.enableCors({ origin: 'https://your.origin/' })
    */
   app.enableCors();
-  app.use(csurf());
+  // app.use(csurf());
 
   const options = new DocumentBuilder()
     .setTitle('NestJS with MongoDB skeleton')
