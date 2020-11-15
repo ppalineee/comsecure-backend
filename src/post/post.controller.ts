@@ -28,7 +28,6 @@ export class PostController {
 
   @Post()
   async createPost(@Body() postDto: PostDto, @User() user: UserModel): Promise<PostModel> {
-    console.log(user);
     return this.postService.create({ownerName: user.username, ownerId: user._id, title: postDto.title ,content: postDto.content});
   }
 
@@ -38,7 +37,7 @@ export class PostController {
     if (post.ownerId == user._id || user.role == UserRole.Admin) {
         return this.postService.edit(pid, postDto.title, postDto.content);
     } else {
-        throw new BadRequestException('Permission denied.')
+        throw new BadRequestException('Permission denied')
     }
   }
 
@@ -47,6 +46,8 @@ export class PostController {
     const post: PostModel = await this.postService.findById(pid);
     if (post.ownerId == user._id || user.role == UserRole.Admin) {
         this.postService.delete(pid);
+    } else {
+      throw new BadRequestException('Permission denied')
     }
   }
 

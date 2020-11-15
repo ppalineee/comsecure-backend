@@ -1,8 +1,10 @@
 import { prop, mongoose, pre } from '@typegoose/typegoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserModel } from './user.model';
+import { IsMongoId } from 'class-validator';
 
 export class PostModel {
+  @IsMongoId()
   _id?: mongoose.Types.ObjectId;
 
   @prop({ required: true })

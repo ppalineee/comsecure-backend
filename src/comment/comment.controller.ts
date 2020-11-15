@@ -8,6 +8,7 @@ import { UserRole } from 'src/enum/user.enum';
 import { Roles } from 'src/decorators/role.decorator';
 import { CommentDto, MsgDto } from './comment.dto';
 import { CommentModel } from 'src/model/comment.model';
+import { mongoose } from '@typegoose/typegoose';
 
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
@@ -28,6 +29,9 @@ export class CommentController {
 
     @Get("pid/:pid")
     async getCommentByPid(@Param('pid') pid: string): Promise<CommentModel[]> {
+        if (!mongoose.Types.ObjectId.isValid(pid)) {
+            throw new BadRequestException('Pid is not valid');
+        }
         return this.commentService.find({pid: pid});
     }
     
@@ -42,7 +46,7 @@ export class CommentController {
         if (comment.ownerId == user._id || user.role == UserRole.Admin) {
             return this.commentService.edit(cid, msgDto.msg);
         } else {
-            throw new BadRequestException('Permission denied.')
+            throw new BadRequestException('Permission denied')
         }
     }
 
@@ -51,6 +55,8 @@ export class CommentController {
         const comment: CommentModel = await this.commentService.findById(cid);
         if (comment.ownerId == user._id || user.role == UserRole.Admin) {
             this.commentService.delete(cid);
+        } else {
+            throw new BadRequestException('Permission denied')
         }
     }
 
