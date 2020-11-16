@@ -11,8 +11,8 @@ async function bootstrap() {
   app.use(helmet());
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
   app.useGlobalPipes(new ValidationPipe());
-  // app.enableCors({ origin: 'http://localhost:8000' });
   app.enableCors();
+  // app.enableCors({ origin: 'http://localhost:8000/' });
   /**
    * wildcard origin is not recommended, consider using
    * app.enableCors({ origin: 'https://your.origin/' })
