@@ -8,13 +8,17 @@ import { RolesGuard } from 'src/guards/role.guard';
 import { UserRole } from 'src/enum/user.enum';
 import { Roles } from 'src/decorators/role.decorator';
 import { PostDto } from './post.dto';
+import { UserService } from 'src/user/user.service';
 
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
 @ApiTags('Post')
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+    private readonly userService: UserService
+  ) {}
 
   @Get()
   async listPost(): Promise<PostModel[]> {
@@ -34,6 +38,7 @@ export class PostController {
   @Patch(":pid")
   async editPost(@Param('pid') pid: string, @Body() postDto: PostDto, @User() user: UserModel) {
     const post: PostModel = await this.postService.findById(pid);
+    const userRole: UserRole = await (await this.userService.findById(user._id)).role;
     if (post.ownerId == user._id || user.role == UserRole.Admin) {
         return this.postService.edit(pid, postDto.title, postDto.content);
     } else {
@@ -44,7 +49,8 @@ export class PostController {
   @Delete(":pid")
   async deletePost(@Param('pid') pid: string, @User() user: UserModel) {
     const post: PostModel = await this.postService.findById(pid);
-    if (post.ownerId == user._id || user.role == UserRole.Admin) {
+    const userRole: UserRole = await (await this.userService.findById(user._id)).role;
+    if (post.ownerId == user._id || userRole == UserRole.Admin) {
         this.postService.delete(pid);
     } else {
       throw new BadRequestException('Permission denied')
