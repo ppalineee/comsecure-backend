@@ -38,8 +38,8 @@ export class PostController {
   @Patch(":pid")
   async editPost(@Param('pid') pid: string, @Body() postDto: PostDto, @User() user: UserModel) {
     const post: PostModel = await this.postService.findById(pid);
-    const userRole: UserRole = await (await this.userService.findById(user._id)).role;
-    if (post.ownerId == user._id || user.role == UserRole.Admin) {
+    const userRole: UserRole = (await this.userService.findById(user._id)).role;
+    if (post.ownerId == user._id || userRole == UserRole.Admin) {
         return this.postService.edit(pid, postDto.title, postDto.content);
     } else {
         throw new BadRequestException('Permission denied')
@@ -49,7 +49,7 @@ export class PostController {
   @Delete(":pid")
   async deletePost(@Param('pid') pid: string, @User() user: UserModel) {
     const post: PostModel = await this.postService.findById(pid);
-    const userRole: UserRole = await (await this.userService.findById(user._id)).role;
+    const userRole: UserRole = (await this.userService.findById(user._id)).role;
     if (post.ownerId == user._id || userRole == UserRole.Admin) {
         this.postService.delete(pid);
     } else {

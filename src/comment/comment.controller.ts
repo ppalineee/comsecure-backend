@@ -47,7 +47,7 @@ export class CommentController {
     @Patch(":cid")
     async editComment(@Param('cid') cid: string, @Body() msgDto: MsgDto, @User() user: UserModel) {
         const comment: CommentModel = await this.commentService.findById(cid);
-        const userRole: UserRole = await (await this.userService.findById(user._id)).role;
+        const userRole: UserRole = (await this.userService.findById(user._id)).role;
         if (comment.ownerId == user._id || userRole == UserRole.Admin) {
             return this.commentService.edit(cid, msgDto.msg);
         } else {
@@ -58,7 +58,7 @@ export class CommentController {
     @Delete(":cid")
     async deleteComment(@Param('cid') cid: string, @User() user: UserModel) {
         const comment: CommentModel = await this.commentService.findById(cid);
-        const userRole: UserRole = await (await this.userService.findById(user._id)).role;
+        const userRole: UserRole = (await this.userService.findById(user._id)).role;
         if (comment.ownerId == user._id || userRole == UserRole.Admin) {
             this.commentService.delete(cid);
         } else {
