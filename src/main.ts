@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import * as rateLimit from 'express-rate-limit';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +13,12 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
-  // app.enableCors({ origin: 'http://localhost:8000/' });
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // limit each IP to 100 requests per windowMs
+    }),
+  );
   /**
    * wildcard origin is not recommended, consider using
    * app.enableCors({ origin: 'https://your.origin/' })
