@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 200, // limit each IP to 200 requests per windowMs
+      max: 5000, // limit each IP to 200 requests per windowMs
     }),
   );
   /**
@@ -30,7 +30,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  // SwaggerModule.setup('api', app, document);
 
   await app.listen(app.get(ConfigService).get('port'));
 }
